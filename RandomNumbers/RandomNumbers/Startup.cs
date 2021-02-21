@@ -40,6 +40,8 @@ namespace RandomNumbers
 
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddScoped<UserService>();
+            services.AddScoped<MatchService>();
+            services.AddScoped<ResultService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

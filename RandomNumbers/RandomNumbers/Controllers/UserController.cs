@@ -14,24 +14,16 @@ namespace RandomNumbers.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<UserController> _logger;
 
         private readonly UserService _userService;
 
-        public UserController(ILogger<WeatherForecastController> logger, UserService userService)
+        public UserController(ILogger<UserController> logger, UserService userService)
         {
             _logger = logger;
             _userService = userService;
         }
 
-        // GET: api/<UserController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<UserController>/5
         [HttpGet("authorize")]
         public async Task<IActionResult> Authorize(string login, string password)
         {
@@ -51,24 +43,6 @@ namespace RandomNumbers.Controllers
                 _logger.LogError(ex.Message);
                 return StatusCode(500);
             }
-        }
-
-        // POST api/<UserController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
