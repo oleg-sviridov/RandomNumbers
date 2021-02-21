@@ -2,17 +2,25 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RandomNumbers.Database;
+using RandomNumbers.Service;
+using System;
 
 namespace RandomNumbers
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -26,6 +34,12 @@ namespace RandomNumbers
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            var connectionString = Configuration["DbContextSettings:ConnectionString"];
+            services.AddDbContext<DataContext>(opts => opts.UseSqlServer(connectionString));
+
+            services.AddScoped<IDbInitializer, DbInitializer>();
+            services.AddScoped<UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,9 +81,18 @@ namespace RandomNumbers
 
                 if (env.IsDevelopment())
                 {
+                    spa.Options.StartupTimeout = new TimeSpan(0, 0, 80);
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var dbInitializer = scope.ServiceProvider.GetService<IDbInitializer>();
+                dbInitializer.Initialize();
+                dbInitializer.SeedData();
+            }
         }
     }
 }
