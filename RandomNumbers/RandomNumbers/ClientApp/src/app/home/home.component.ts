@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -15,9 +17,8 @@ export class HomeComponent {
   };
 
   public getAll() {
-	  this.http.get<Cities[]>(this.baseUrl + 'api/result/finished').subscribe(result => {
+	  this.http.get<Results[]>(this.baseUrl + 'api/result/finished').subscribe(result => {
       this.results = result;
-	  console.log(this.cities);
     }, error => console.error(error));
   }
 }

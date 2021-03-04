@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RandomNumbers.Service;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace RandomNumbers.Controllers
 {
     [Route("api/[controller]")]
@@ -24,8 +22,6 @@ namespace RandomNumbers.Controllers
             _resultService = resultService;
         }
 
-
-        // GET: api/<MatchController>
         [HttpGet]
         [Route("finished")]
         public async Task<IActionResult> GetFinishedMatchResults()
@@ -44,7 +40,6 @@ namespace RandomNumbers.Controllers
 
         }
 
-        // GET: api/<ResultController>
         [HttpPost]
         public async Task<IActionResult> PostResult(int number, Guid userId)
         {

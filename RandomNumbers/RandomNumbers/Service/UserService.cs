@@ -17,7 +17,7 @@ namespace RandomNumbers.Service
             _datacontext = datacontext;
         }
 
-        public async Task<User> Authorize(string login, string password)
+        public async Task<User> Authenticate(string login, string password)
         {
              var user = await _datacontext.Users.FirstOrDefaultAsync(
                 x=> x.Login== login && x.Password== password);

@@ -71,14 +71,6 @@ namespace RandomNumbers.Database
                         context.Users.Add(user1);
                     }
 
-                    //just a sample result
-                    if (!context.Results.Any())
-                    {
-                        var result = new Result { ResultId = Guid.NewGuid(), UserId = Guid.NewGuid(), Number =1 };
-
-                        context.Results.Add(result);
-                    }
-
                     context.SaveChanges();
                 }
             }
